@@ -87,4 +87,65 @@ public class Service {
 	catch (Exception e) {}     
  }
 	
+@GET
+ @Path("/get_next_user_id")
+ @Produces("text/plain")
+ public Response get_next_user_id() 
+ {           
+	String str_id = null;
+	try { 
+		str_id = model.get_next_user_id();
+	}
+	catch (Exception e) {
+		return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();	
+    }
+	return Response.ok(str_id).build();           
+ }
+	
+@GET
+ @Path("/auth")
+ @Produces("text/plain")
+ public Response auth(@QueryParam("user") String user_data) 
+ {           
+	String check_auth;
+	Jsonb jsonb = JsonbBuilder.create();
+	EUser user = new EUser();
+	user = jsonb.fromJson(user_data, EUser.class);
+	try { 
+		check_auth = model.auth(user);
+	}
+	catch (Exception e) {
+		return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();	
+    }
+	return Response.ok(check_auth).build();           
+ }
+
+@PUT
+ @Path("/registration_client")
+ @Consumes("application/json")
+ public void registration_client(String user_data)
+ {           
+	Jsonb jsonb = JsonbBuilder.create();
+	EClient client = new EClient();
+	client = jsonb.fromJson(user_data, EClient.class);
+	try { 
+		model.registration_client(client);
+	}
+	catch (Exception e) {}     
+ }
+  
+ @PUT
+ @Path("/registration_user")
+ @Consumes("application/json")
+ public void registration_user(String user_data)
+ {           
+	Jsonb jsonb = JsonbBuilder.create();
+	EUser user = new EUser();
+	user = jsonb.fromJson(user_data, EUser.class);
+	try { 
+		model.registration_user(user);
+	}
+	catch (Exception e) {}     
+ }
+
 }
