@@ -26,5 +26,22 @@ public class Model implements IModel
    
     @Resource
     private UserTransaction userTransaction;
+    
+    public void get_ad(EAd ad, String user_data) {
+		EntityManager entityManager;
+		entityManager = entityManagerFactory.createEntityManager();
+		try
+		{
+			userTransaction.begin();
+		}
+		catch (Exception e) {}
+		entityManager.joinTransaction();
+		ad = entityManager.find(EAd.class, user_data);
+		try
+		{
+			userTransaction.commit();
+		}
+		catch (Exception e) {}
+    }
 	
 }
