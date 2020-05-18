@@ -7,5 +7,5 @@ import java.util.List;
 import java.sql.*;
 
 public interface IModel {
-	
+	void get_ad(EAd ad, String user_data);
 }
