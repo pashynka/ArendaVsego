@@ -91,5 +91,103 @@ public class Model implements IModel
 			throw new Exception("Error while JPA operating: " + e.getMessage());
 		}
     }
+    
+    public String get_next_user_id() {
+		Long max_id;
+		int cur_id;
+		String str_id;
+		EntityManager entityManager;
+		entityManager = entityManagerFactory.createEntityManager();
+		try
+		{
+			userTransaction.begin();
+		}
+		catch (Exception e) {}
+		entityManager.joinTransaction();
+		Query query = entityManager.createQuery("SELECT COUNT(u) FROM USERSS u");
+		max_id = (Long)query.getSingleResult();
+		max_id = max_id + 1;
+		cur_id = Math.toIntExact(max_id);
+		str_id = Integer.toString(cur_id);
+		try
+		{
+			userTransaction.commit();
+		}
+		catch (Exception e) {}
+		return str_id;
+    }
+    
+    public String auth(EUser user) {
+		String check_auth;
+		EntityManager entityManager;
+		entityManager = entityManagerFactory.createEntityManager();
+		try
+		{
+			userTransaction.begin();
+		}
+		catch (Exception e) {}
+		entityManager.joinTransaction();
+		String check_login = user.getLogin();
+		EUser bd_user = entityManager.createQuery("SELECT u FROM USERSS u where u.login = :value1", EUser.class)
+                 .setParameter("value1", check_login).getSingleResult();
+		String check_pass = user.getPass();
+		String bd_pass = bd_user.getPass();
+		String bd_id = bd_user.getId();
+		if (check_pass.equals(bd_pass)) check_auth = "true " + bd_id;
+		else check_auth = "false";
+		try
+		{
+			userTransaction.commit();
+		}
+		catch (Exception e) {}
+		return check_auth;
+    }
+    
+    public void registration_client(EClient client) throws Exception {
+		try 
+		{
+			EntityManager entityManager;
+			try {
+				entityManager = entityManagerFactory.createEntityManager();
+			}
+			catch (Exception e) {
+				throw new Exception("Error while Entity Manager initializing: " + e.getMessage()); 
+			}	 
+			try {
+				userTransaction.begin();
+				entityManager.joinTransaction();				
+				entityManager.persist(client);
+				userTransaction.commit();
+			} catch (Exception e) {}
+		} 
+		catch (Exception e) 
+		{
+			throw new Exception("Error while JPA operating: " + e.getMessage());
+		}
+    }
+	
+	
+	public void registration_user(EUser user) throws Exception {
+		try 
+		{
+			EntityManager entityManager;
+			try {
+				entityManager = entityManagerFactory.createEntityManager();
+			}
+			catch (Exception e) {
+				throw new Exception("Error while Entity Manager initializing: " + e.getMessage()); 
+			}	 
+			try {
+				userTransaction.begin();
+				entityManager.joinTransaction();				
+				entityManager.persist(user);
+				userTransaction.commit();
+			} catch (Exception e) {}
+		} 
+		catch (Exception e) 
+		{
+			throw new Exception("Error while JPA operating: " + e.getMessage());
+		}
+    }
 	
 }
