@@ -58,4 +58,33 @@ public class Service {
 	return Response.ok(resultJSON).build();           
  }
  
+@GET
+ @Path("/get_next_ad_id")
+ @Produces("text/plain")
+ public Response get_next_ad_id() 
+ {           
+	String str_id = null;
+	try { 
+		str_id = model.get_next_ad_id();
+	}
+	catch (Exception e) {
+		return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();	
+    }
+	return Response.ok(str_id).build();           
+ }
+	
+@PUT
+ @Path("/add_ad")
+ @Consumes("application/json")
+ public void add_ad(String user_data)
+ {           
+	Jsonb jsonb = JsonbBuilder.create();
+	EAd ad = new EAd();
+	ad = jsonb.fromJson(user_data, EAd.class);
+	try { 
+		model.add_ad(ad);
+	}
+	catch (Exception e) {}     
+ }
+	
 }
