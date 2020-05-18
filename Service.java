@@ -32,4 +32,30 @@ public class Service {
  @Inject
  IModel model;
  
+ @GET
+ @Path("/get_ad")
+ @Produces("application/json")
+ public Response get_ad(@QueryParam("id") String user_data) 
+ {           
+	EAd ad = new EAd();
+	try {
+		model.get_ad(ad, user_data);
+	}
+	catch (Exception e) {
+		return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();	
+    }
+	Jsonb jsonb = JsonbBuilder.create();                
+	String resultJSON = "";
+	try {  		  
+		resultJSON = jsonb.toJson(ad);	  	 
+	}
+	catch (JsonbException e) {
+		return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();	             
+	}	
+	catch (Exception e) {
+		return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();	             
+	}    
+	return Response.ok(resultJSON).build();           
  }
+ 
+}
