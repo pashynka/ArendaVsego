@@ -8,4 +8,6 @@ import java.sql.*;
 
 public interface IModel {
 	void get_ad(EAd ad, String user_data);
+	String get_next_ad_id();
+	void add_ad(EAd ad) throws Exception;
 }
